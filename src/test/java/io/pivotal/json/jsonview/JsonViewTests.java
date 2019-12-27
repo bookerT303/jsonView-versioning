@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static io.pivotal.json.jsonview.model.Versions.CURRENT_VERSION;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -114,13 +115,13 @@ class JsonViewTests {
         assertEquals(ITEM_ID, item.getId());
         assertNull(item.getOwnerName());
 
-        final Item v3Item = mapper.readerWithView(Versions.V3.class)
+        final Item currentVersionItem = mapper.readerWithView(CURRENT_VERSION)
                 .forType(Item.class)
                 .readValue(json);
-        assertEquals(ITEM_ID, v3Item.getId());
-        assertEquals(ITEM_NAME, v3Item.getItemName());
-        assertEquals(NAME_UPPER, v3Item.getOwnerName());
-        assertEquals(CREDIT_CARD, v3Item.getOwnerCreditCard());
+        assertEquals(ITEM_ID, currentVersionItem.getId());
+        assertEquals(ITEM_NAME, currentVersionItem.getItemName());
+        assertEquals(NAME_UPPER, currentVersionItem.getOwnerName());
+        assertEquals(CREDIT_CARD, currentVersionItem.getOwnerCreditCard());
     }
 
     @Test

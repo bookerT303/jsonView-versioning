@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.pivotal.json.jsonview.model.Item;
 import io.pivotal.json.jsonview.model.Versions;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/items")
+@Api(value = "API Versioning using `accept` header", description = "Item REST API using Json View for versioning", tags = {"ItemController"})
 public class ItemController {
 
     private ObjectMapper mapper;
@@ -21,8 +25,9 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> get(@RequestHeader(HttpHeaders.ACCEPT) String accepts,
-                                      @PathVariable int id) throws JsonProcessingException {
+    @ApiOperation(value = "Get the Item", response = Item.class)
+    public ResponseEntity<String> get(@RequestHeader(value = HttpHeaders.ACCEPT, required = false) String accepts,
+                                      @ApiParam(value = "Item Id", required = true) @PathVariable int id) throws JsonProcessingException {
 
         Class<?> version = determineVersion(accepts);
         if (version == null) {
